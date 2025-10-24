@@ -1,11 +1,11 @@
 # Hono 与 Alova.js 的邂逅
 
 [![npm](https://img.shields.io/npm/v/@huusan/hono-alovajs-uniapp-client.svg)](https://npmjs.com/package/@huusan/hono-alovajs-uniapp-client)
-[![Unit Test](https://github.com/huusan/hono-alovajs-client/actions/workflows/unit-test.yml/badge.svg)](https://github.com/huusan/hono-alovajs-client/actions/workflows/unit-test.yml)
+
 
 借助 Hono 的强大功能，为你的 alova.js 请求带来端到端的类型安全。
 
-`hono-alovajs-client` 允许你以类型安全的方式调用 Hono 后端 API，就像 tRPC 一样，但不受限于 React。它能与 alova.js 及其 Vue、React、Svelte 等适配器无缝协作。
+`hono-alovajs-uniapp-client` 允许你以类型安全的方式调用 Hono 后端 API，就像 tRPC 一样，但不受限于 React。它能与 alova.js 及其 Vue、React、Svelte 等适配器无缝协作。
 
 ## 功能特性
 

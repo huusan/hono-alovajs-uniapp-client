@@ -16,7 +16,7 @@ export const upperMethodFirstLetter = (
 // the functions below are copied from hono
 
 export const mergePath = (base: string, path: string) => {
-  base = base.replace(///\/+$/, '')
+  base = base.replace(/\/+$/, '')
   base = `${base}/`
   path = path.replace(/^\/+/, '')
   return base + path

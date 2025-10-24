@@ -2,7 +2,7 @@
 
 Bring end-to-end type-safety to your alova.js requests, with the power of Hono.
 
-`hono-alovajs-client` allows you to call your Hono backend APIs in a type-safe way, just like tRPC, but without being tied to React. It works seamlessly with alova.js and its adapters for Vue, React, Svelte, and more.
+`hono-alovajs-uniapp-client` allows you to call your Hono backend APIs in a type-safe way, just like tRPC, but without being tied to React. It works seamlessly with alova.js and its adapters for Vue, React, Svelte, and more.
 
 ## Features
 
