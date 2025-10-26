@@ -98,7 +98,18 @@ export type AlovaMethodCreateConfig<
   AG extends AlovaGenerics = AlovaGenerics,
   Responded = any,
   Transformed = any,
-> = Partial<MethodRequestConfig> & AlovaMethodConfig<AG, Responded, Transformed>
+> = Partial<MethodRequestConfig> &
+  AlovaMethodConfig<AG, Responded, Transformed> &
+  ClientRequestOptions & {
+    name?: string | number
+    cacheFor?:
+      | number
+      | {
+          mode?: 'memory' | 'storage'
+          expire?: number | ((method: Method) => number)
+          tag?: string | ((method: Method) => string)
+        }
+  }
 
 type ClientResponseOfEndpoint<T extends Endpoint = Endpoint> = T extends {
   output: infer O

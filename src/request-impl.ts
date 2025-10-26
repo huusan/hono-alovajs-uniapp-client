@@ -8,7 +8,7 @@ import {
   upperMethodFirstLetter,
 } from './utils'
 import type { AlovaMethodCreateConfig } from './types'
-import type { Alova, AlovaGenerics } from 'alova'
+import type { Alova, AlovaGenerics, Method } from 'alova'
 import type { ClientRequestOptions, ValidationTargets } from 'hono'
 import type { FormValue } from 'hono/types'
 
@@ -34,13 +34,13 @@ export class AlovaRequestImpl<A extends Alova<AlovaGenerics>> {
     this.ins = ins
   }
 
-  async apply(
+  apply(
     args?: ValidationTargets<FormValue> & {
       param?: Record<string, string>
     },
     config?: AlovaMethodCreateConfig<AlovaGenerics<any, any, any, any, any>>,
     options?: ClientRequestOptions,
-  ) {
+  ): Method {
     if (args) {
       if (args.query) {
         this.queryParams = buildSearchParams(args.query)
@@ -62,9 +62,6 @@ export class AlovaRequestImpl<A extends Alova<AlovaGenerics>> {
 
     const headerValues: Record<string, string> = {
       ...args?.header,
-      ...(typeof options?.headers === 'function'
-        ? await options.headers()
-        : options?.headers),
       ...config?.headers,
     }
 
@@ -89,10 +86,13 @@ export class AlovaRequestImpl<A extends Alova<AlovaGenerics>> {
       url = `${url}?${this.queryParams.toString()}`
     }
 
-    const finalConfig = deepMerge<
-      AlovaMethodCreateConfig<AlovaGenerics<any, any, any, any, any>>
-    >(config ?? {}, {
+    // 合并所有配置选项
+    const mergedConfig: AlovaMethodCreateConfig<
+      AlovaGenerics<any, any, any, any, any>
+    > = deepMerge(config ?? {}, {
+      ...options,
       headers: headerValues,
+      name: config?.name,
     })
 
     const setBody =
@@ -101,9 +101,9 @@ export class AlovaRequestImpl<A extends Alova<AlovaGenerics>> {
       this.method !== 'Options'
 
     if (setBody) {
-      return this.ins[this.method](url, this.rBody, finalConfig)
+      return this.ins[this.method](url, this.rBody, mergedConfig)
     } else {
-      return this.ins[this.method](url, finalConfig)
+      return this.ins[this.method](url, mergedConfig)
     }
   }
 }
@@ -182,10 +182,15 @@ export class ClientRequestImpl {
 
     // Pass URL string to 1st arg for testing with MSW and node-fetch
     // Handle different body types for Uniapp vs standard web environment
-    const isUniappEnvironment = typeof globalThis !== 'undefined' && 'uni' in globalThis
+    const isUniappEnvironment =
+      typeof globalThis !== 'undefined' && 'uni' in globalThis
     const requestBody = setBody ? this.rBody : undefined
-    
-    if (isUniappEnvironment && typeof requestBody === 'object' && requestBody !== null) {
+
+    if (
+      isUniappEnvironment &&
+      typeof requestBody === 'object' &&
+      requestBody !== null
+    ) {
       // For Uniapp, pass the form object directly
       return (opt?.fetch || fetch)(url, {
         body: requestBody as any,

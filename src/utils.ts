@@ -75,7 +75,7 @@ export const replaceUrlParam = (
   params: Record<string, string | undefined>,
 ) => {
   for (const [k, v] of Object.entries(params)) {
-    const reg = new RegExp(`/:${k}(?:{[^/]+})?\??`)
+    const reg = new RegExp(`/:${k}(?:{[^/]+})?\\??`)
     urlString = urlString.replace(reg, v ? `/${v}` : '')
   }
   return urlString
@@ -101,7 +101,9 @@ export const buildSearchParams = (query: Record<string, string | string[]>) => {
   return searchParams
 }
 
-export const handleForm = (formValue: Record<string, FormValue>) => {
+export const handleForm = (
+  formValue: Record<string, FormValue | FormValue[]>,
+) => {
   const isUniappEnvironment =
     typeof globalThis !== 'undefined' && 'uni' in globalThis
 
